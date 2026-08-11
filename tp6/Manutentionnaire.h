@@ -1,28 +1,22 @@
 #pragma once
-#include <stdio.h>
 #include <iostream>
 #include <string>
 #include "Employe.h"
-using namespace std;
 class Manutentionnaire : public Employe
 {
+private:
+    int nbheure = 0;
 public:
-    int nbheure;
-public:
-    Manutentionnaire(){};
-    Manutentionnaire(string name, string prenom, string date,int nbUnite) : Employe(name,prenom,date),nbheure{nbheure}{};
+    Manutentionnaire() = default;
+    Manutentionnaire(const std::string & name, const std::string & prenom, const std::string & date, int nbUnite) : Employe(name,prenom,date),nbheure{nbUnite}{};
     double salaire() const override{return nbheure*65;};
-    string getinfo()const{
-        return "nom : "+nom+" prenom : "+prenom+" date : "+date+" salaire : "+to_string(this->salaire());
+    std::string getinfo() const override{
+        return "nom : "+nom+" prenom : "+prenom+" date : "+date+" salaire : "+std::to_string(this->salaire());
     };
-    friend istream & operator>>(istream & in, Manutentionnaire & p){
-			if (!(in >> p.nom >>p.prenom>> p.date >> p.nbheure)) {
-				in.setstate(ios::failbit);
-			}
-			return in;
-		};
-    friend ostream & operator<<(ostream & out, const Manutentionnaire & p){
-		out << p.getinfo() <<endl;
-		return out;
-	};
+    friend std::istream & operator>>(std::istream & in, Manutentionnaire & p){
+				if (!(in >> static_cast<Employe&>(p) >> p.nbheure)) {
+					in.setstate(std::ios::failbit);
+				}
+				return in;
+			};
 };

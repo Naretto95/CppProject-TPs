@@ -1,26 +1,18 @@
 #pragma once
-#include <stdio.h>
 #include <iostream>
 #include <string>
 #include "Employe.h"
-using namespace std;
 class Commercial : public Employe
 {
+protected:
+    double chiffreAffaire = 0.0;
 public:
-    double chiffreAffaire;
-public:
-    Commercial(){};
-    Commercial(string name, string prenom, string date,double chiffreAffaire) : Employe(name,prenom,date),chiffreAffaire{chiffreAffaire}{};
-    virtual double salaire()const=0;
-    virtual string getinfo()const=0;
-    friend istream & operator>>(istream & in, Commercial & p){
-			if (!(in >> p.nom >>p.prenom>> p.date >> p.chiffreAffaire)) {
-				in.setstate(ios::failbit);
-			}
-			return in;
-		};
-    friend ostream & operator<<(ostream & out, const Commercial & p){
-		out << p.getinfo() <<endl;
-		return out;
-	};
+    Commercial() = default;
+    Commercial(const std::string & name, const std::string & prenom, const std::string & date, double chiffreAffaire) : Employe(name,prenom,date),chiffreAffaire{chiffreAffaire}{};
+    friend std::istream & operator>>(std::istream & in, Commercial & p){
+				if (!(in >> static_cast<Employe&>(p) >> p.chiffreAffaire)) {
+					in.setstate(std::ios::failbit);
+				}
+				return in;
+			};
 };

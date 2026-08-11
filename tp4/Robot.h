@@ -7,9 +7,9 @@ class Robot {
 	private :
 		std::string name;
 		std::string type;
-		double price;
+		double price = 0.0;
 	public :
-		Robot(){};
+		Robot() = default;
 		Robot(const std::string & n, const std::string & t, double p):name{n},type{t},price{p}{};
 		std::string getName() const {return name;};
 		bool operator<(const Robot & other) const{
@@ -20,8 +20,7 @@ class Robot {
 			return out;
 		};
 		friend std::istream & operator>>(std::istream & in, Robot & p){
-			std::string c;
-			if (!(in >> p.name >>p.type>> p.price)) {
+			if (!(in >> p.name >> p.type >> p.price)) {
 				in.setstate(std::ios::failbit);
 			}
 			return in;

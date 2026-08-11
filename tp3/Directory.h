@@ -1,53 +1,52 @@
 #pragma once
-#include <stdio.h>
 #include <iostream>
 #include <vector>
-#include <typeinfo>
+#include <string>
 #include "File.h"
 #include "Video.h"
-using namespace std;
+
 class Directory
 {
 private:
-    vector<File *> repertoire;
-    string name;
+    std::vector<File *> repertoire;
+    std::string name;
 public:
-    Directory(string name): name{name}{};
-    void add(File * File){repertoire.push_back(File);};
-    void afficher() { for (auto File : repertoire)
+    Directory(const std::string & name): name{name}{};
+    void add(File * file){repertoire.push_back(file);};
+    void afficher() const { for (auto file : repertoire)
     {
-        File->afficher();
+        file->afficher();
     }
     };
-    unsigned int CompressionMoyen() {
-        unsigned int result=0;
-        for (auto File : repertoire)
+    unsigned int CompressionMoyen() const {
+        if (repertoire.empty())
         {
-            result+=File->getcompressedsize();
+            return 0;
+        }
+        unsigned int result=0;
+        for (auto file : repertoire)
+        {
+            result+=file->getcompressedsize();
         }
         return result/repertoire.size();
     };
-    unsigned int CompressionMoyenVideo() {
+    unsigned int CompressionMoyenVideo() const {
         unsigned int result=0;
         unsigned int accum=0;
-        for (auto File : repertoire)
+        for (auto file : repertoire)
         {
-            if (File->isvideo())
+            if (file->isvideo())
             {
                 accum+=1;
-                result+=File->getcompressedsize();
+                result+=file->getcompressedsize();
             }
-            
+
         }
-        
-        return result/accum;
-        
-    };
-    ~Directory(){
-        for (auto File : repertoire)
+        if (accum==0)
         {
-            repertoire.pop_back();
+            return 0;
         }
-        
-    }
+        return result/accum;
+
+    };
 };

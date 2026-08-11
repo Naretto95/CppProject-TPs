@@ -1,28 +1,26 @@
 #pragma once
-#include <stdio.h>
 #include <iostream>
 #include <string>
-using namespace std;
 class Employe
 {
+protected:
+    std::string nom;
+    std::string prenom;
+    std::string date;
 public:
-    string nom;
-    string prenom;
-    string date;
-public:
-    Employe(){};
-    Employe(string nom, string prenom, string date) : nom{nom},prenom{prenom},date{date}{};
+    Employe() = default;
+    Employe(const std::string & nom, const std::string & prenom, const std::string & date) : nom{nom},prenom{prenom},date{date}{};
     virtual double salaire()const=0;
-    virtual string getinfo()const=0;
-    friend istream & operator>>(istream & in, Employe & p){
-			if (!(in >> p.nom >>p.prenom>> p.date)) {
-				in.setstate(ios::failbit);
-			}
-			return in;
+    virtual std::string getinfo()const=0;
+    friend std::istream & operator>>(std::istream & in, Employe & p){
+				if (!(in >> p.nom >>p.prenom>> p.date)) {
+					in.setstate(std::ios::failbit);
+				}
+				return in;
+			};
+    friend std::ostream & operator<<(std::ostream & out, const Employe & p){
+			out << p.getinfo() <<std::endl;
+			return out;
 		};
-    friend ostream & operator<<(ostream & out, const Employe & p){
-		out << p.getinfo() <<endl;
-		return out;
-	};
-    virtual ~Employe() {};
+    virtual ~Employe() = default;
 };

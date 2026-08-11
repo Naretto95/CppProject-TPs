@@ -4,7 +4,7 @@
 #include "Video.h"
 #include "Directory.h"
 
-int main(int argc, char const *argv[])
+int main()
 {
     Image image("image","extensionimage",50,20,20);
     Text text("text","extensiontext",50,Unicode);
@@ -16,6 +16,6 @@ int main(int argc, char const *argv[])
     directory.add(&video);
     directory.add(&video2);
     directory.afficher();
-    cout<<"compresion moyenne : "<<directory.CompressionMoyen()<<endl;
-    cout<<"compression moyenne videos : "<<directory.CompressionMoyenVideo()<<endl;
+    std::cout<<"compresion moyenne : "<<directory.CompressionMoyen()<<std::endl;
+    std::cout<<"compression moyenne videos : "<<directory.CompressionMoyenVideo()<<std::endl;
 }

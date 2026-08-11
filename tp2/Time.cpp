@@ -1,5 +1,7 @@
 #include "Time.h"
 #include <iostream>
+#include <stdexcept>
+
 Time::Time(unsigned short hour, unsigned short minute, unsigned short second) : hour{hour} , minute{minute}, second{second}{
 }
 
@@ -28,58 +30,36 @@ bool Time::operator!=(const Time & other) const{
 }
 
 Time& Time::operator++(){
-    try
+    if (second<59)
     {
-        if (second<59)
-        {
-            this->second=second+1;
-            return *this;
-        }else{
-            if (minute<59)
-            {
-                this->second=0;
-                this->minute=minute+1;
-                return *this;
-            }else{
-                this->second=0;
-                this->minute=0;
-                this->hour=hour+1;
-                return *this;
-            }
-        }
-    }
-    catch(const std::exception& e)
+        this->second=second+1;
+    }else if (minute<59)
     {
-        std::cerr << e.what() << '\n';
+        this->second=0;
+        this->minute=minute+1;
+    }else{
+        this->second=0;
+        this->minute=0;
+        this->hour=hour+1;
     }
+    return *this;
 }
 
 Time& Time::operator--(){
-    try
-    { 
-        if (*this <= Time(0,0,0)) {
-			throw std::string("Valeur impossible !");
-		}else{
-            if (second>0)
-            {
-                this->second=second-1;
-                return *this;
-            }else{
-                if (minute>0)
-                {
-                    this->second=59;
-                    this->minute=minute-1;
-                    return *this;
-                }else{
-                    this->second=59;
-                    this->minute=59;
-                    this->hour=hour-1;
-                    return *this;
-                }
-            } 
-        }  
+    if (*this <= Time(0,0,0)) {
+        throw std::out_of_range("Time::operator--: cannot decrement below 00:00:00");
     }
-    catch(std::string const& chaine){
-		std::cerr << chaine << std::endl;
-	}
+    if (second>0)
+    {
+        this->second=second-1;
+    }else if (minute>0)
+    {
+        this->second=59;
+        this->minute=minute-1;
+    }else{
+        this->second=59;
+        this->minute=59;
+        this->hour=hour-1;
+    }
+    return *this;
 }

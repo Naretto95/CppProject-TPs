@@ -1,21 +1,15 @@
 #include <iostream>
 #include "Disk.h"
 
-Disk::Disk(int diameter) : diameter{new int(diameter)}{
+Disk::Disk(int diameter) : diameter{diameter}{
 
 }
-Disk::Disk(const Disk & other) : diameter{new int(*other.diameter)}{
 
-}
-Disk::~Disk(){
-    delete diameter;
-};
-
-int* Disk::getdiameter(){
+int Disk::getdiameter() const{
     return diameter;
 }
 
 std::ostream& operator<<(std::ostream& out, const Disk & p){
-    out << *p.diameter << std::endl;
+    out << p.diameter << std::endl;
     return out;
 }

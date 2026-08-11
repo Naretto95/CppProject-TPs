@@ -1,64 +1,61 @@
+#pragma once
 #include <iostream>
-using namespace std;
+#include <vector>
+#include <stdexcept>
 
 template <class T>
 class stack
 {
 private:
-    T *Tableau;
-    int premier;
-    int taille;
- 
+    std::vector<T> Tableau;
+    size_t taille;
+
 public:
-    stack(int size);
+    explicit stack(size_t size);
     void push(const T &);
     T pop();
-    T peek();
-    int size() const;
+    T peek() const;
+    size_t size() const;
     bool Empty() const;
-    ~stack() {
-        delete[] Tableau;
-    }
 };
 
 template <class T>
-stack<T>::stack(int size)
+stack<T>::stack(size_t size) : taille{size}
 {
-    Tableau = new T[size];
-    taille = size;
-    premier = -1;
+    Tableau.reserve(size);
 }
 
 template <class T>
 void stack<T>::push(const T &x)
 {
-    if (premier==taille-1)
+    if (Tableau.size() == taille)
     {
-        cout << "Stack complet\n";
-        exit(EXIT_FAILURE);
+        throw std::overflow_error("Stack complet");
     }
-    cout << "Insertion de : " << x << endl;
-    Tableau[++premier] = x;
+    std::cout << "Insertion de : " << x << std::endl;
+    Tableau.push_back(x);
 }
 
 template <class T>
-T stack<T>::peek()
+T stack<T>::peek() const
 {
-    if (!Empty()) {
-        return Tableau[premier];
+    if (Empty())
+    {
+        throw std::underflow_error("Stack vide");
     }
+    return Tableau.back();
 }
 
 template <class T>
-int stack<T>::size() const
+size_t stack<T>::size() const
 {
-    return premier + 1;
+    return Tableau.size();
 }
 
 template <class T>
 bool stack<T>::Empty() const
 {
-    return premier == -1;               
+    return Tableau.empty();
 }
 
 template <class T>
@@ -66,10 +63,10 @@ T stack<T>::pop()
 {
     if (Empty())
     {
-        cout << "Stack vide \n";
-        exit(EXIT_FAILURE);
+        throw std::underflow_error("Stack vide");
     }
- 
-    cout << "on enleve : " << peek() << endl;
-    return Tableau[premier--];
+    T top = Tableau.back();
+    std::cout << "on enleve : " << top << std::endl;
+    Tableau.pop_back();
+    return top;
 }

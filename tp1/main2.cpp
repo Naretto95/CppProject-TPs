@@ -1,10 +1,9 @@
 #include <iostream>
-#include <string.h>
 #include "Tower.h"
 #include "Disk.h"
 #include "Game.h"
 
-int main(int argc, char const *argv[])
+int main()
 {
     Disk disk1(1);
     Disk disk2(2);

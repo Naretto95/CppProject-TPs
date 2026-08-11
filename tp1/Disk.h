@@ -3,11 +3,9 @@
 
 class Disk{
 	private :
-		int* diameter;
+		int diameter;
 	public :
 		Disk(int diameter);
-        int* getdiameter();
-        ~Disk();
-		Disk(const Disk & other);
+        int getdiameter() const;
 	friend std::ostream& operator<<(std::ostream& out, const Disk & p);
 };

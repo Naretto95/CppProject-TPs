@@ -1,73 +1,64 @@
 #pragma once
-#include <stdio.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <memory>
 #include <fstream>
 #include "representant.h"
 #include "Vendeur.h"
 #include "Technicien.h"
 #include "Manutentionnaire.h"
-using namespace std;
 class Personnel
 {
 private:
-    vector<Employe*> liste;
+    std::vector<std::unique_ptr<Employe>> liste;
 public:
-    Personnel(){};
-    int size(){
+    Personnel() = default;
+    size_t size() const{
         return liste.size();
     }
-    void ajouter(Employe* e){
-        this->liste.push_back(e);
+    void ajouter(std::unique_ptr<Employe> e){
+        this->liste.push_back(std::move(e));
     }
-    void charger(string fichier){
-        ifstream ifs(fichier);
-        string phrase;
-        Vendeur* V=new Vendeur();
-        Representant* R=new Representant();
-        Technicien* T=new Technicien();
-        Manutentionnaire* M=new Manutentionnaire();
+    void charger(const std::string & fichier){
+        std::ifstream ifs(fichier);
+        std::string phrase;
         if (ifs)
         {
-            while (!ifs.eof())
+            while (ifs >> phrase)
             {
-                ifs>>phrase;
-                if (!ifs.fail())
+                if (phrase=="V")
                 {
-                    if (phrase=="V")
-                    {
-                        ifs>>*V;
-                        this->liste.push_back(V);
-                    }
-                    if (phrase=="R")
-                    {
-                        ifs>>*R;
-                        this->liste.push_back(R);
-                    }
-                    if (phrase=="T")
-                    {
-                        ifs>>*T;
-                        this->liste.push_back(T);
-                    }
-                    if (phrase=="M")
-                    {
-                        ifs>>*M;
-                        this->liste.push_back(M);
-                    }
+                    auto v = std::make_unique<Vendeur>();
+                    ifs>>*v;
+                    this->liste.push_back(std::move(v));
                 }
-                
+                if (phrase=="R")
+                {
+                    auto r = std::make_unique<Representant>();
+                    ifs>>*r;
+                    this->liste.push_back(std::move(r));
+                }
+                if (phrase=="T")
+                {
+                    auto t = std::make_unique<Technicien>();
+                    ifs>>*t;
+                    this->liste.push_back(std::move(t));
+                }
+                if (phrase=="M")
+                {
+                    auto m = std::make_unique<Manutentionnaire>();
+                    ifs>>*m;
+                    this->liste.push_back(std::move(m));
+                }
             }
             ifs.close();
         }
     };
-    void afficher(){
-        for (int i = 0; i < liste.size(); i++)
+    void afficher() const{
+        for (const auto & employe : liste)
         {
-           cout<<liste[i]->getinfo()<<endl;
+           std::cout<<employe->getinfo()<<std::endl;
         }
-    }
-    bool compareEmploye(Employe* e1,Employe* e2){
-
     }
 };

@@ -6,14 +6,12 @@
 
 class Tower{
 	private :
-		std::string* name;
+		std::string name;
         std::vector<Disk> tour;
 	public :
 		Tower(std::string name);
-		Tower(const Tower & other);
         void pushDisk(Disk d);
         Disk popDisk();
-        std::string getname();
-		~Tower();
+        std::string getname() const;
 	friend std::ostream& operator<<(std::ostream& out, const Tower & p);
 };
